@@ -1,1 +1,5 @@
 package gseg
+
+func New() {
+
+}

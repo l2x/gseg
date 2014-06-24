@@ -1,0 +1,4 @@
+package gseg
+
+func loadDict() {
+}
