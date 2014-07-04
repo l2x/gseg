@@ -18,15 +18,15 @@ func New() Seg {
 	return Seg{}
 }
 
+//Simple 匹配方法
 func (s *Seg) Simple(words string) []string {
-	w := strings.Split(words, "")
-	res := []string{}
-	start := 0
-	end := 0
-	max := len(w)
+	var w []string = strings.Split(words, "")
+	var res []string = []string{}
+	var start, end, i, max int
+	max = len(w)
 
 	for start < max {
-		_, i := s.dict.GetMax(w[start:])
+		_, i = s.dict.GetMax(w[start:])
 		end = start + i
 		res = append(res, strings.Join(w[start:end], ""))
 		start = end
@@ -35,6 +35,7 @@ func (s *Seg) Simple(words string) []string {
 	return res
 }
 
+//complex 匹配方法
 func (s *Seg) Complex(words string) {
 
 }

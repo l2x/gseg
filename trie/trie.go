@@ -80,6 +80,20 @@ func (t *Trie) GetMax(w []string) (*Trie, int) {
 	return t, arr[len(arr)-1] + 1
 }
 
+func (t *Trie) GetAll(w []string) []int {
+	var ok bool
+
+	arr := []int{}
+	for k, v := range w {
+		t, ok = t.get(v)
+		if !ok {
+			break
+		}
+		arr = append(arr, k)
+	}
+	return arr
+}
+
 func (t *Trie) last() {
 	t.End++
 }
