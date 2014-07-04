@@ -1,7 +1,7 @@
 package gseg
 
 import (
-	"fmt"
+	//	"fmt"
 	"github.com/l2x/gseg/trie"
 	"strings"
 )
@@ -18,44 +18,19 @@ func New() Seg {
 	return Seg{}
 }
 
-func (s *Seg) Simple(words string) []int {
+func (s *Seg) Simple(words string) []string {
 	w := strings.Split(words, "")
-
-	max := len(w)
+	res := []string{}
 	start := 0
-	ind := 0
-	res := []int{}
+	end := 0
+	max := len(w)
 
 	for start < max {
-		reserve := []int{}
-
-		for end := start + 1; (end-start) <= MaxWordLen && end < max; end++ {
-			if start+end >= max {
-				end = max
-			}
-
-			ind = s.search(start, end, w[start:end])
-
-			fmt.Println(start, end, ind)
-
-			if ind != 0 {
-				reserve = append(reserve, ind)
-			}
-		}
-
-		//没有匹配
-		fmt.Println(reserve, start)
-		lr := len(reserve)
-		if lr == 0 {
-			reserve = append(reserve, start+1)
-		}
-
-		start = reserve[len(reserve)-1]
-
-		res = append(res, start)
+		_, i := s.dict.GetMax(w[start:])
+		end = start + i
+		res = append(res, strings.Join(w[start:end], ""))
+		start = end
 	}
-
-	fmt.Println(res)
 
 	return res
 }
