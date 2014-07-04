@@ -1,25 +1,28 @@
 package trie
 
 type Trie struct {
-	Value    byte
+	Value    string
 	Count    int
 	End      int
-	Children map[byte]*Trie
+	Children map[string]*Trie
 }
 
 func New() *Trie {
 	return &Trie{
-		Children: make(map[byte]*Trie),
+		Children: make(map[string]*Trie),
 	}
 }
 
-func (t *Trie) Insert(w []byte) error {
+func (t *Trie) Insert(w []string) error {
 	l := len(w)
 	if l == 0 {
 		return nil
 	}
 
 	for _, v := range w {
+		if v == " " {
+			continue
+		}
 		t = t.insert(v)
 	}
 	t.last()
@@ -27,7 +30,7 @@ func (t *Trie) Insert(w []byte) error {
 	return nil
 }
 
-func (t *Trie) insert(w byte) *Trie {
+func (t *Trie) insert(w string) *Trie {
 	if _, ok := t.Children[w]; !ok {
 		t.Children[w] = New()
 		t.Children[w].Value = w
@@ -37,7 +40,7 @@ func (t *Trie) insert(w byte) *Trie {
 	return t.Children[w]
 }
 
-func (t *Trie) Get(w []byte) (*Trie, bool) {
+func (t *Trie) Get(w []string) (*Trie, bool) {
 	var ok bool
 
 	for _, v := range w {
@@ -54,7 +57,7 @@ func (t *Trie) Get(w []byte) (*Trie, bool) {
 	return t, true
 }
 
-func (t *Trie) get(w byte) (*Trie, bool) {
+func (t *Trie) get(w string) (*Trie, bool) {
 	if _, ok := t.Children[w]; ok {
 		return t.Children[w], true
 	}
