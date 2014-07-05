@@ -45,63 +45,40 @@ func (s *Seg) Complex(words string) {
 	var w []string = strings.Split(words, "")
 
 	//分别取出3组备选词
+	cache := s.search(w, 0)
+
+	for k, v := range cache {
+		offset := v.Ind + 1
+		c2 := s.search(w[offset:], offset)
+		cache[k].C = c2
+
+		for k2, v2 := range c2 {
+			offset := v2.Ind + 1
+			c3 := s.search(w[offset:], offset)
+			cache[k].C[k2].C = c3
+		}
+	}
+	//TODO
+	//maximum matching
+
+	//largest average word length
+
+	//smallest variance of word lengths
+
+	//largest sum of degree of morphemic freedom of one-character words
+
+}
+
+func (s *Seg) search(w []string, offset int) []Cache {
 	cache := []Cache{}
 	res := s.dict.GetAll(w)
 	for _, v := range res {
 		c := Cache{
-			Ind: v,
+			Ind: v + offset,
 			C:   []Cache{},
 		}
 		cache = append(cache, c)
 	}
 
-	fmt.Println(cache)
-
-	for k, cv := range cache {
-
-		i := cv.Ind + 1
-
-		res = s.dict.GetAll(w[i:])
-		for _, v := range res {
-			c := Cache{
-				Ind: v + i,
-				C:   []Cache{},
-			}
-			cache[k].C = append(cache[k].C, c)
-		}
-	}
-
-	for k1, cv := range cache {
-
-		fmt.Println(w[:cv.Ind+1])
-
-		for k2, cv2 := range cv.C {
-			i := cv2.Ind + 1
-
-			fmt.Println(w[cv.Ind+1 : i])
-
-			res = s.dict.GetAll(w[i:])
-			for _, v := range res {
-				c := Cache{
-					Ind: v + i,
-					C:   []Cache{},
-				}
-				fmt.Println(w[cv2.Ind+1 : c.Ind])
-				cache[k1].C[k2].C = append(cache[k1].C[k2].C, c)
-			}
-		}
-		fmt.Println("---")
-	}
-
-	fmt.Println(cache)
-
-}
-
-func (s *Seg) search(start int, end int, w []string) int {
-	var ok bool
-	_, ok = s.dict.Get(w)
-	if ok {
-		return end
-	}
-	return 0
+	return cache
 }
