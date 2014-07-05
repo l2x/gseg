@@ -1,7 +1,7 @@
 package gseg
 
 import (
-	//	"fmt"
+	"fmt"
 	"github.com/l2x/gseg/trie"
 	"strings"
 )
@@ -12,6 +12,11 @@ var (
 
 type Seg struct {
 	dict *trie.Trie
+}
+
+type Cache struct {
+	Ind int
+	C   []Cache
 }
 
 func New() Seg {
@@ -37,6 +42,39 @@ func (s *Seg) Simple(words string) []string {
 
 //complex 匹配方法
 func (s *Seg) Complex(words string) {
+	var w []string = strings.Split(words, "")
+
+	//分别取出3组备选词
+	cache := []Cache{}
+	res := s.dict.GetAll(w)
+	for _, v := range res {
+		c := Cache{
+			Ind: v,
+			C:   []Cache{},
+		}
+		cache = append(cache, c)
+	}
+
+	fmt.Println(cache)
+
+	for k, cv := range cache {
+		fmt.Println(w[:cv.Ind])
+
+		i := cv.Ind + 1
+
+		res = s.dict.GetAll(w[i:])
+		for _, v := range res {
+			c := Cache{
+				Ind: v + i,
+				C:   []Cache{},
+			}
+			fmt.Println(w[cv.Ind:c.Ind])
+			cache[k].C = append(cache[k].C, c)
+		}
+		fmt.Println("---")
+	}
+
+	fmt.Println(cache)
 
 }
 

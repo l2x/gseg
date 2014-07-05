@@ -1,5 +1,9 @@
 package trie
 
+import (
+//	"fmt"
+)
+
 type Trie struct {
 	Value    string
 	Count    int
@@ -20,12 +24,9 @@ func (t *Trie) Insert(w []string) error {
 	}
 
 	for _, v := range w {
-		if v == " " {
-			continue
-		}
 		t = t.insert(v)
 	}
-	t.last()
+	t.end()
 
 	return nil
 }
@@ -74,7 +75,9 @@ func (t *Trie) GetMax(w []string) (*Trie, int) {
 		if !ok {
 			break
 		}
-		arr = append(arr, k)
+		if t.End > 0 {
+			arr = append(arr, k)
+		}
 	}
 
 	return t, arr[len(arr)-1] + 1
@@ -89,11 +92,13 @@ func (t *Trie) GetAll(w []string) []int {
 		if !ok {
 			break
 		}
-		arr = append(arr, k)
+		if t.End > 0 {
+			arr = append(arr, k)
+		}
 	}
 	return arr
 }
 
-func (t *Trie) last() {
+func (t *Trie) end() {
 	t.End++
 }

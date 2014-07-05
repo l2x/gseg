@@ -25,8 +25,13 @@ func (s *Seg) LoadDict(file string) error {
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
 		w = strings.Split(scanner.Text(), "")
-		if len(w) > MaxWordLen {
-			MaxWordLen = len(w)
+		//略过单字
+		l := len(w)
+		if l == 1 {
+			continue
+		}
+		if l > MaxWordLen {
+			MaxWordLen = l
 		}
 		s.dict.Insert(w)
 	}
