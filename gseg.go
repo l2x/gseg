@@ -58,7 +58,6 @@ func (s *Seg) Complex(words string) {
 	fmt.Println(cache)
 
 	for k, cv := range cache {
-		fmt.Println(w[:cv.Ind])
 
 		i := cv.Ind + 1
 
@@ -68,8 +67,28 @@ func (s *Seg) Complex(words string) {
 				Ind: v + i,
 				C:   []Cache{},
 			}
-			fmt.Println(w[cv.Ind:c.Ind])
 			cache[k].C = append(cache[k].C, c)
+		}
+	}
+
+	for k1, cv := range cache {
+
+		fmt.Println(w[:cv.Ind+1])
+
+		for k2, cv2 := range cv.C {
+			i := cv2.Ind + 1
+
+			fmt.Println(w[cv.Ind+1 : i])
+
+			res = s.dict.GetAll(w[i:])
+			for _, v := range res {
+				c := Cache{
+					Ind: v + i,
+					C:   []Cache{},
+				}
+				fmt.Println(w[cv2.Ind+1 : c.Ind])
+				cache[k1].C[k2].C = append(cache[k1].C[k2].C, c)
+			}
 		}
 		fmt.Println("---")
 	}
