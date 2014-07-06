@@ -12,9 +12,9 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	s := "那就是说"
+	s := "那就是说我不回家了"
 
-	//fmt.Println(gs.Simple("那就是说我不回家了"))
+	//fmt.Println(gs.Simple(s))
 	//gs.Complex2(s)
 	gs.Complex(s)
 }
