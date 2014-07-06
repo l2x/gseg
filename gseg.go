@@ -44,20 +44,31 @@ func (s *Seg) Simple(words string) []string {
 func (s *Seg) Complex(words string) {
 	var w []string = strings.Split(words, "")
 
-	//分别取出3组备选词
-	cache := s.search(w, 0)
+	cache := s.search(w)
+	fmt.Println(cache)
 
-	for k, v := range cache {
-		offset := v.Ind + 1
-		c2 := s.search(w[offset:], offset)
-		cache[k].C = c2
-
-		for k2, v2 := range c2 {
-			offset := v2.Ind + 1
-			c3 := s.search(w[offset:], offset)
-			cache[k].C[k2].C = c3
+	/*
+		fmt.Println(cache)
+		for _, v := range cache {
+			fmt.Println(w[:v[0]+1])
+			if v[1] != 0 {
+				end := v[1] + 1
+				if v[1]+1 > len(w) {
+					end = len(w)
+				}
+				fmt.Println(w[v[0]+1 : end])
+			}
+			if v[2] != 0 {
+				end := v[2] + 1
+				if v[2]+1 > len(w) {
+					end = len(w)
+				}
+				fmt.Println(w[v[1]+1 : end])
+			}
+			fmt.Println("+++++")
 		}
-	}
+	*/
+
 	//TODO
 	//maximum matching
 
@@ -69,16 +80,49 @@ func (s *Seg) Complex(words string) {
 
 }
 
-func (s *Seg) search(w []string, offset int) []Cache {
-	cache := []Cache{}
-	res := s.dict.GetAll(w)
-	for _, v := range res {
-		c := Cache{
-			Ind: v + offset,
-			C:   []Cache{},
+func (s *Seg) search(w []string) [][]int {
+	tmp := [][]int{}
+	c1 := s.dict.GetAll(w)
+	l := len(w)
+
+	for _, v1 := range c1 {
+		offset := v1 + 1
+		c2 := s.dict.GetAll(w[offset:])
+		if len(c2) == 0 {
+			end := offset
+			if end == l {
+				end = 0
+			}
+			tmp = append(tmp, []int{v1, end, 0})
+			continue
 		}
-		cache = append(cache, c)
+		for _, v2 := range c2 {
+			offset := v1 + v2 + 2
+			c3 := s.dict.GetAll(w[offset:])
+			if len(c3) == 0 {
+				end := offset
+				if end == l {
+					end = 0
+				}
+				tmp = append(tmp, []int{v1, offset - 1, end})
+				continue
+			}
+			for _, v3 := range c3 {
+				offset := v1 + v2 + 1
+				end := offset + v3 + 1
+				if end > l {
+					end = l
+				}
+				tmp = append(tmp, []int{v1, offset, end})
+			}
+		}
+
 	}
 
-	return cache
+	return tmp
+}
+
+func maxMatch(cache []Cache) ([]Cache, bool) {
+
+	return cache, false
 }
