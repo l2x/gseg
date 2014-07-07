@@ -17,5 +17,6 @@ func main() {
 	//fmt.Println(gs.Simple(s))
 	//gs.Complex(s)
 
+	s = "研究生"
 	gs.Complex(s)
 }

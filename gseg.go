@@ -51,14 +51,14 @@ func (s *Seg) Complex(words string) {
 
 	for start < max {
 		cache := searchWords(s, w[start:])
+		fmt.Println("cache1=>", cache)
 
+		//如果第一个词只有一个, 那就把这个词作为第一个词
 		if len(cache) == 1 {
 			end = start + cache[0][0] + 1
 			segment = append(segment, strings.Join(w[start:end], ""))
 			start = end
 		}
-
-		fmt.Println("segment=>", segment)
 
 		/*
 			fmt.Println(cache)
@@ -82,25 +82,36 @@ func (s *Seg) Complex(words string) {
 			}
 		*/
 
-		fmt.Println("cache=>", cache)
-
 		//TODO
 		//maximum matching
 		cache = maxMatch(cache)
+		fmt.Println("cache2=>", cache)
+
 		if len(cache) == 1 {
 			end = start + cache[0][0] + 1
 			segment = append(segment, strings.Join(w[start:end], ""))
 			start = end
+
+			break
 		}
-		fmt.Println("cache=>", cache)
 
 		//largest average word length
+		cache = largestAvg(cache)
+		fmt.Println("cache3=>", cache)
+		if len(cache) == 1 {
+			end = start + cache[0][0] + 1
+			segment = append(segment, strings.Join(w[start:end], ""))
+			start = end
+
+			break
+		}
+
+		start = max
 
 		//smallest variance of word lengths
 
 		//largest sum of degree of morphemic freedom of one-character words
 
-		start = max
 	}
 
 }
