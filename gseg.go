@@ -1,7 +1,7 @@
 package gseg
 
 import (
-	"fmt"
+	//	"fmt"
 	"github.com/l2x/gseg/trie"
 	"strings"
 )
@@ -41,7 +41,7 @@ func (s *Seg) Simple(words string) []string {
 }
 
 //complex 匹配方法
-func (s *Seg) Complex(words string) {
+func (s *Seg) Complex(words string) []string {
 	var w []string = strings.Split(words, "")
 
 	segment := []string{}
@@ -51,67 +51,53 @@ func (s *Seg) Complex(words string) {
 
 	for start < max {
 		cache := searchWords(s, w[start:])
-		fmt.Println("cache1=>", cache)
 
 		//如果第一个词只有一个, 那就把这个词作为第一个词
 		if len(cache) == 1 {
 			end = start + cache[0][0] + 1
 			segment = append(segment, strings.Join(w[start:end], ""))
 			start = end
+			continue
 		}
 
-		/*
-			fmt.Println(cache)
-			for _, v := range cache {
-				fmt.Println(w[:v[0]+1])
-				if v[1] != 0 {
-					end := v[1] + 1
-					if v[1]+1 > len(w) {
-						end = len(w)
-					}
-					fmt.Println(w[v[0]+1 : end])
-				}
-				if v[2] != 0 {
-					end := v[2] + 1
-					if v[2]+1 > len(w) {
-						end = len(w)
-					}
-					fmt.Println(w[v[1]+1 : end])
-				}
-				fmt.Println("+++++")
-			}
-		*/
-
-		//TODO
 		//maximum matching
 		cache = maxMatch(cache)
-		fmt.Println("cache2=>", cache)
 
 		if len(cache) == 1 {
 			end = start + cache[0][0] + 1
 			segment = append(segment, strings.Join(w[start:end], ""))
 			start = end
 
-			break
+			continue
 		}
 
 		//largest average word length
 		cache = largestAvg(cache)
-		fmt.Println("cache3=>", cache)
 		if len(cache) == 1 {
 			end = start + cache[0][0] + 1
 			segment = append(segment, strings.Join(w[start:end], ""))
 			start = end
 
-			break
+			continue
 		}
 
-		start = max
-
 		//smallest variance of word lengths
+		cache = smallestVariance(cache)
+		if len(cache) == 1 {
+			end = start + cache[0][0] + 1
+			segment = append(segment, strings.Join(w[start:end], ""))
+			start = end
 
+			continue
+		}
+
+		//TODO
 		//largest sum of degree of morphemic freedom of one-character words
+		end = start + cache[0][0] + 1
+		segment = append(segment, strings.Join(w[start:end], ""))
+		start = end
 
 	}
 
+	return segment
 }
