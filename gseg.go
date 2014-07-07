@@ -44,85 +44,63 @@ func (s *Seg) Simple(words string) []string {
 func (s *Seg) Complex(words string) {
 	var w []string = strings.Split(words, "")
 
-	cache := s.search(w)
-	fmt.Println(cache)
+	segment := []string{}
+	start := 0
+	end := 0
+	max := len(w)
 
-	/*
-		fmt.Println(cache)
-		for _, v := range cache {
-			fmt.Println(w[:v[0]+1])
-			if v[1] != 0 {
-				end := v[1] + 1
-				if v[1]+1 > len(w) {
-					end = len(w)
-				}
-				fmt.Println(w[v[0]+1 : end])
-			}
-			if v[2] != 0 {
-				end := v[2] + 1
-				if v[2]+1 > len(w) {
-					end = len(w)
-				}
-				fmt.Println(w[v[1]+1 : end])
-			}
-			fmt.Println("+++++")
-		}
-	*/
+	for start < max {
+		cache := searchWords(s, w[start:])
 
-	//TODO
-	//maximum matching
-
-	//largest average word length
-
-	//smallest variance of word lengths
-
-	//largest sum of degree of morphemic freedom of one-character words
-
-}
-
-func (s *Seg) search(w []string) [][]int {
-	tmp := [][]int{}
-	c1 := s.dict.GetAll(w)
-	l := len(w)
-
-	for _, v1 := range c1 {
-		offset := v1 + 1
-		c2 := s.dict.GetAll(w[offset:])
-		if len(c2) == 0 {
-			end := offset
-			if end == l {
-				end = 0
-			}
-			tmp = append(tmp, []int{v1, end, 0})
-			continue
-		}
-		for _, v2 := range c2 {
-			offset := v1 + v2 + 2
-			c3 := s.dict.GetAll(w[offset:])
-			if len(c3) == 0 {
-				end := offset
-				if end == l {
-					end = 0
-				}
-				tmp = append(tmp, []int{v1, offset - 1, end})
-				continue
-			}
-			for _, v3 := range c3 {
-				offset := v1 + v2 + 1
-				end := offset + v3 + 1
-				if end > l {
-					end = l
-				}
-				tmp = append(tmp, []int{v1, offset, end})
-			}
+		if len(cache) == 1 {
+			end = start + cache[0][0] + 1
+			segment = append(segment, strings.Join(w[start:end], ""))
+			start = end
 		}
 
+		fmt.Println("segment=>", segment)
+
+		/*
+			fmt.Println(cache)
+			for _, v := range cache {
+				fmt.Println(w[:v[0]+1])
+				if v[1] != 0 {
+					end := v[1] + 1
+					if v[1]+1 > len(w) {
+						end = len(w)
+					}
+					fmt.Println(w[v[0]+1 : end])
+				}
+				if v[2] != 0 {
+					end := v[2] + 1
+					if v[2]+1 > len(w) {
+						end = len(w)
+					}
+					fmt.Println(w[v[1]+1 : end])
+				}
+				fmt.Println("+++++")
+			}
+		*/
+
+		fmt.Println("cache=>", cache)
+
+		//TODO
+		//maximum matching
+		cache = maxMatch(cache)
+		if len(cache) == 1 {
+			end = start + cache[0][0] + 1
+			segment = append(segment, strings.Join(w[start:end], ""))
+			start = end
+		}
+		fmt.Println("cache=>", cache)
+
+		//largest average word length
+
+		//smallest variance of word lengths
+
+		//largest sum of degree of morphemic freedom of one-character words
+
+		start = max
 	}
 
-	return tmp
-}
-
-func maxMatch(cache []Cache) ([]Cache, bool) {
-
-	return cache, false
 }
