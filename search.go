@@ -4,6 +4,7 @@ import (
 	//"fmt"
 	"math"
 	"sort"
+	"strings"
 )
 
 //获取最大匹配的备选词
@@ -90,6 +91,17 @@ func getAvg(cache []int) float64 {
 	avg = float64(t) / float64(l)
 
 	return avg
+}
+
+//TODO
+func wordsInit(words string) []string {
+	w := strings.Split(words, "")
+	t := []string{}
+
+	for _, v := range w {
+	}
+
+	return w
 }
 
 //获取所有可能的3个备选词
