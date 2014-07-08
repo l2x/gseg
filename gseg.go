@@ -25,7 +25,7 @@ func New() Seg {
 
 //Simple 匹配方法
 func (s *Seg) Simple(words string) []string {
-	var w []string = strings.Split(words, "")
+	var w []string = wordsInit(words)
 	var res []string = []string{}
 	var start, end, i, max int
 	max = len(w)
@@ -42,7 +42,7 @@ func (s *Seg) Simple(words string) []string {
 
 //complex 匹配方法
 func (s *Seg) Complex(words string) []string {
-	var w []string = strings.Split(words, "")
+	var w []string = wordsInit(words)
 
 	segment := []string{}
 	start := 0

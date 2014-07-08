@@ -1,7 +1,7 @@
 package gseg
 
 import (
-	//"fmt"
+	//	"fmt"
 	"math"
 	"sort"
 	"strings"
@@ -76,6 +76,7 @@ func smallestVariance(cache [][]int) [][]int {
 	return tmp
 }
 
+//获取平均值
 func getAvg(cache []int) float64 {
 	var l, t, a int
 	var avg float64
@@ -93,15 +94,67 @@ func getAvg(cache []int) float64 {
 	return avg
 }
 
-//TODO
+//初始化字符串
 func wordsInit(words string) []string {
 	w := strings.Split(words, "")
 	t := []string{}
+	l := len(w)
+	start := 0
 
-	for _, v := range w {
+	for start < l {
+		s := w[start]
+		if len(s) == 1 {
+			b := []byte(s)[0]
+			switch {
+			case b > 64 && b < 123:
+				i := filter(w[start:], 0)
+				end := start + i
+				s = strings.Join(w[start:end], "")
+				start = end
+				t = append(t, s)
+				continue
+			case b > 47 && b < 58:
+				i := filter(w[start:], 1)
+				end := start + i
+				s = strings.Join(w[start:end], "")
+				start = end
+				t = append(t, s)
+				continue
+			}
+		}
+
+		t = append(t, s)
+		start++
 	}
 
-	return w
+	return t
+}
+
+//将英文和数字合并成一个词
+func filter(w []string, t int) int {
+	l := len(w)
+	for k, v := range w {
+		if len(v) == 1 {
+			b := []byte(v)[0]
+			if t == 0 && (b > 64 && b < 123) {
+				if k == l-1 {
+					return l
+				}
+				continue
+			}
+			if t == 1 && (b > 47 && b < 58) {
+				if k == l-1 {
+					return l
+				}
+				continue
+			}
+		}
+		if k == 0 {
+			return 1
+		}
+		return k
+	}
+	return 1
 }
 
 //获取所有可能的3个备选词
