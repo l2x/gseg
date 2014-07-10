@@ -93,10 +93,10 @@ func (s *Seg) Complex(words string) []string {
 
 		//TODO
 		//largest sum of degree of morphemic freedom of one-character words
+
 		end = start + cache[0][0] + 1
 		segment = append(segment, strings.Join(w[start:end], ""))
 		start = end
-
 	}
 
 	return segment
